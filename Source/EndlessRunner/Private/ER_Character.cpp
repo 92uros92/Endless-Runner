@@ -4,10 +4,11 @@
 #include "ER_Character.h"
 #include "Camera/CameraComponent.h"
 #include "GameFramework/SpringArmComponent.h"
-//#include "GameFramework/Controller.h"
+#include "GameFramework/Controller.h"
 
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
+#include "Components/InputComponent.h"
 
 
 
@@ -38,15 +39,17 @@ void AER_Character::BeginPlay()
 	}
 }
 
-/*void AER_Character::Move(const FInputActionValue& Value)
+void AER_Character::MoveRightLeft(const FInputActionValue& Value)
 {
-	FVector2D MovementVector = Value.Get<FVector2D>();
+	const float CurrentValue = Value.Get<float>();
 
-	if (Controller != nullptr)
+	if (CurrentValue)
 	{
+		const FVector RightDirection = GetActorRightVector();
 
+		AddMovementInput(RightDirection, CurrentValue);
 	}
-}*/
+}
 
 void AER_Character::Tick(float DeltaTime)
 {
@@ -63,7 +66,7 @@ void AER_Character::SetupPlayerInputComponent(UInputComponent* PlayerInputCompon
 		EnhancedInputComponent->BindAction(JumpAction, ETriggerEvent::Triggered, this, &ACharacter::Jump);
 		EnhancedInputComponent->BindAction(JumpAction, ETriggerEvent::Completed, this, &ACharacter::StopJumping);
 
-		//EnhancedInputComponent->BindAction(MoveRightLeftAction, ETriggerEvent::Triggered, this, &AER_Character::Move);
+		EnhancedInputComponent->BindAction(MoveRightLeftAction, ETriggerEvent::Triggered, this, &AER_Character::MoveRightLeft);
 	}
 }
 
