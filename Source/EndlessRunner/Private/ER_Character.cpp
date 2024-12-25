@@ -55,6 +55,11 @@ void AER_Character::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+	FRotator ControlRot = GetControlRotation();
+	ControlRot.Roll = 0.0f;
+	ControlRot.Pitch = 0.0f;
+
+	AddMovementInput(ControlRot.Vector());
 }
 
 void AER_Character::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
