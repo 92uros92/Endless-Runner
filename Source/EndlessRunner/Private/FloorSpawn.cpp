@@ -14,7 +14,7 @@ AFloorSpawn::AFloorSpawn()
 	PrimaryActorTick.bCanEverTick = true;
 
 	SceneComp = CreateDefaultSubobject<USceneComponent>(TEXT("SceneComp"));
-	SceneComp->SetupAttachment(RootComponent);
+	RootComponent = SceneComp;
 
 	MeshComp = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("MeshComp"));
 	MeshComp->SetupAttachment(SceneComp);
@@ -30,6 +30,10 @@ AFloorSpawn::AFloorSpawn()
 
 	LeftLane = CreateDefaultSubobject<UArrowComponent>(TEXT("LeftLane"));
 	LeftLane->SetupAttachment(SceneComp);
+
+	FloorSpawnBox = CreateDefaultSubobject<UBoxComponent>(TEXT("FloorSpawnBox"));
+	FloorSpawnBox->SetupAttachment(SceneComp);
+	FloorSpawnBox->SetCollisionProfileName(TEXT("OverlapOnlyPawn"));
 }
 
 void AFloorSpawn::BeginPlay()
