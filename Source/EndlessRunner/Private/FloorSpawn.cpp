@@ -16,8 +16,20 @@ AFloorSpawn::AFloorSpawn()
 	SceneComp = CreateDefaultSubobject<USceneComponent>(TEXT("SceneComp"));
 	RootComponent = SceneComp;
 
-	MeshComp = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("MeshComp"));
-	MeshComp->SetupAttachment(SceneComp);
+	AsphaltComp = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("AsphaltComp"));
+	AsphaltComp->SetupAttachment(SceneComp);
+
+	LeftRoadMarkingComp = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("LeftRoadMarkingComp"));
+	LeftRoadMarkingComp->SetupAttachment(SceneComp);
+
+	RightRoadMarkingComp = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("RightRoadMarkingComp"));
+	RightRoadMarkingComp->SetupAttachment(SceneComp);
+
+	LeftCurbComp = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("LeftCurbComp"));
+	LeftCurbComp->SetupAttachment(SceneComp);
+
+	RightCurbComp = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("RightCurbComp"));
+	RightCurbComp->SetupAttachment(SceneComp);
 
 	AttachPoint = CreateDefaultSubobject<UArrowComponent>(TEXT("AttachPoint"));
 	AttachPoint->SetupAttachment(SceneComp);
@@ -34,6 +46,11 @@ AFloorSpawn::AFloorSpawn()
 	FloorSpawnBox = CreateDefaultSubobject<UBoxComponent>(TEXT("FloorSpawnBox"));
 	FloorSpawnBox->SetupAttachment(SceneComp);
 	FloorSpawnBox->SetCollisionProfileName(TEXT("OverlapOnlyPawn"));
+}
+
+const FTransform& AFloorSpawn::GetAttachTransform() const
+{
+	return AttachPoint->GetComponentTransform();
 }
 
 void AFloorSpawn::BeginPlay()

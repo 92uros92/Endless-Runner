@@ -19,7 +19,19 @@ public:
 	class USceneComponent* SceneComp;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components")
-	class UStaticMeshComponent* MeshComp;
+	class UStaticMeshComponent* AsphaltComp;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components")
+	class UStaticMeshComponent* LeftRoadMarkingComp;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components")
+	class UStaticMeshComponent* RightRoadMarkingComp;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components")
+	class UStaticMeshComponent* LeftCurbComp;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components")
+	class UStaticMeshComponent* RightCurbComp;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components")
 	class UArrowComponent* AttachPoint;
@@ -36,7 +48,10 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components")
 	class UBoxComponent* FloorSpawnBox;
 
+
 	AFloorSpawn();
+
+	const FTransform& GetAttachTransform() const;
 
 protected:
 

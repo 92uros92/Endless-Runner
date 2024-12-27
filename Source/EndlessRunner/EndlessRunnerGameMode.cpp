@@ -2,7 +2,10 @@
 
 #include "EndlessRunnerGameMode.h"
 #include "EndlessRunnerCharacter.h"
+#include "FloorSpawn.h"
 #include "UObject/ConstructorHelpers.h"
+
+
 
 AEndlessRunnerGameMode::AEndlessRunnerGameMode()
 {
@@ -11,5 +14,35 @@ AEndlessRunnerGameMode::AEndlessRunnerGameMode()
 	if (PlayerPawnBPClass.Class != NULL)
 	{
 		DefaultPawnClass = PlayerPawnBPClass.Class;
+	}
+}
+
+void AEndlessRunnerGameMode::BeginPlay()
+{
+	Super::BeginPlay();
+
+	CreateInitialFloorSurfaces();
+}
+
+void AEndlessRunnerGameMode::CreateInitialFloorSurfaces()
+{
+	for (int i = 0; i < NumInitialFloorSurfaces; i++)
+	{
+		AddFloorSurface();
+	}
+}
+
+void AEndlessRunnerGameMode::AddFloorSurface()
+{
+	UWorld* World = GetWorld();
+
+	if (World)
+	{
+		AFloorSpawn* FloorSpawn = World->SpawnActor<AFloorSpawn>(FloorSpawnClass, NextFloorSpawnPoint);
+
+		if (FloorSpawn)
+		{
+			NextFloorSpawnPoint = FloorSpawn->GetAttachTransform();
+		}
 	}
 }
