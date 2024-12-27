@@ -6,6 +6,7 @@
 #include "GameFramework/GameModeBase.h"
 #include "EndlessRunnerGameMode.generated.h"
 
+
 UCLASS(minimalapi)
 class AEndlessRunnerGameMode : public AGameModeBase
 {
@@ -24,12 +25,15 @@ public:
 	UPROPERTY(VisibleInstanceOnly, Category = "Runtime")
 	FTransform NextFloorSpawnPoint;
 
+	UPROPERTY(VisibleInstanceOnly, Category = "Runtime")
+	TArray<float> LaneSwitchValues;
+
 
 	UFUNCTION(BlueprintCallable)
 	void CreateInitialFloorSurfaces();
 
 	UFUNCTION(BlueprintCallable)
-	void AddFloorSurface();
+	class AFloorSpawn* AddFloorSurface();
 
 protected:
 

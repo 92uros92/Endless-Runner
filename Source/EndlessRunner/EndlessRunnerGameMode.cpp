@@ -3,6 +3,7 @@
 #include "EndlessRunnerGameMode.h"
 #include "EndlessRunnerCharacter.h"
 #include "FloorSpawn.h"
+#include "Components/ArrowComponent.h"
 #include "UObject/ConstructorHelpers.h"
 
 
@@ -26,13 +27,27 @@ void AEndlessRunnerGameMode::BeginPlay()
 
 void AEndlessRunnerGameMode::CreateInitialFloorSurfaces()
 {
+	AFloorSpawn* FloorSpawn = AddFloorSurface();
+
+	if (FloorSpawn)
+	{
+		LaneSwitchValues.Add(FloorSpawn->LeftLane->GetComponentLocation().Y);
+		LaneSwitchValues.Add(FloorSpawn->RightLane->GetComponentLocation().Y);
+		LaneSwitchValues.Add(FloorSpawn->CenterLane->GetComponentLocation().Y);
+	}
+
+	for (float Value : LaneSwitchValues)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Lane Value: %f"), Value);
+	}
+
 	for (int i = 0; i < NumInitialFloorSurfaces; i++)
 	{
 		AddFloorSurface();
 	}
 }
 
-void AEndlessRunnerGameMode::AddFloorSurface()
+AFloorSpawn* AEndlessRunnerGameMode::AddFloorSurface()
 {
 	UWorld* World = GetWorld();
 
@@ -44,5 +59,9 @@ void AEndlessRunnerGameMode::AddFloorSurface()
 		{
 			NextFloorSpawnPoint = FloorSpawn->GetAttachTransform();
 		}
+
+		return FloorSpawn;
 	}
+
+	return nullptr;
 }

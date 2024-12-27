@@ -14,18 +14,35 @@ class ENDLESSRUNNER_API AER_Character : public ACharacter
 
 public:
 
+	UPROPERTY(VisibleInstanceOnly, BlueprintReadWrite, Category = "Lane")
+	int32 CurrentLane;
+
+	UPROPERTY(VisibleInstanceOnly, BlueprintReadWrite, Category = "Lane")
+	int32 NextLane;
+
+
 	AER_Character();
 
 	virtual void Tick(float DeltaTime) override;
 
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
+	UFUNCTION(BlueprintImplementableEvent, Category = "Lane")
+	void ChangeLane();
+
+	UFUNCTION(BlueprintCallable, Category = "Lane")
+	void UpdateChangeLane(const float Value);
+
+	UFUNCTION(BlueprintCallable, Category = "Lane")
+	void FinishedChangeLane();
 
 protected:
 
 	virtual void BeginPlay() override;
 
-	void MoveRightLeft(const FInputActionValue& Value);
+	void MoveRight();
+
+	void MoveLeft();
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components")
 	class USpringArmComponent* SpringArm;
@@ -37,8 +54,16 @@ protected:
 	class UInputMappingContext* ERMappingContext;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input")
-	class UInputAction* MoveRightLeftAction;
+	class UInputAction* MoveRightAction;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input")
+	class UInputAction* MoveLeftAction;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input")
 	UInputAction* JumpAction;
+
+private:
+
+	UPROPERTY(VisibleInstanceOnly)
+	class AEndlessRunnerGameMode* RunGameMode;
 };

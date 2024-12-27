@@ -2,8 +2,11 @@
 
 
 #include "ER_Character.h"
+#include "../EndlessRunnerGameMode.h"
+#include "Kismet/GameplayStatics.h"
 #include "Camera/CameraComponent.h"
 #include "GameFramework/SpringArmComponent.h"
+#include "Components/CapsuleComponent.h"
 #include "GameFramework/Controller.h"
 
 #include "EnhancedInputComponent.h"
@@ -24,6 +27,8 @@ AER_Character::AER_Character()
 	SpringArm->bUsePawnControlRotation = false;
 	CameraComp->SetupAttachment(SpringArm, USpringArmComponent::SocketName);
 	
+	CurrentLane = 1;
+	NextLane = 0;
 }
 
 void AER_Character::BeginPlay()
@@ -37,18 +42,39 @@ void AER_Character::BeginPlay()
 			Subsystem->AddMappingContext(ERMappingContext, 0);
 		}
 	}
+
+	RunGameMode = Cast<AEndlessRunnerGameMode>(UGameplayStatics::GetGameMode(GetWorld()));
+
+	check(RunGameMode);
 }
 
-void AER_Character::MoveRightLeft(const FInputActionValue& Value)
+void AER_Character::UpdateChangeLane(const float Value)
 {
-	const float CurrentValue = Value.Get<float>();
+	//const float CurrentValue = Value.Get<float>();
 
-	if (CurrentValue)
-	{
-		const FVector RightDirection = GetActorRightVector();
+	//if (CurrentValue)
+	//{
+		FVector Location = GetCapsuleComponent()->GetComponentLocation();
+		Location.Y = FMath::Lerp(RunGameMode->LaneSwitchValues[CurrentLane], RunGameMode->LaneSwitchValues[NextLane], Value);
+		SetActorLocation(Location);
+	//}
+}
 
-		AddMovementInput(RightDirection, CurrentValue);
-	}
+void AER_Character::FinishedChangeLane()
+{
+	CurrentLane = NextLane;
+}
+
+void AER_Character::MoveRight()
+{
+	NextLane = FMath::Clamp(CurrentLane + 1, 0, 2);
+	ChangeLane();
+}
+
+void AER_Character::MoveLeft()
+{
+	NextLane = FMath::Clamp(CurrentLane - 1, 0, 2);
+	ChangeLane();
 }
 
 void AER_Character::Tick(float DeltaTime)
@@ -71,7 +97,7 @@ void AER_Character::SetupPlayerInputComponent(UInputComponent* PlayerInputCompon
 		EnhancedInputComponent->BindAction(JumpAction, ETriggerEvent::Triggered, this, &ACharacter::Jump);
 		EnhancedInputComponent->BindAction(JumpAction, ETriggerEvent::Completed, this, &ACharacter::StopJumping);
 
-		EnhancedInputComponent->BindAction(MoveRightLeftAction, ETriggerEvent::Triggered, this, &AER_Character::MoveRightLeft);
+		EnhancedInputComponent->BindAction(MoveRightAction, ETriggerEvent::Triggered, this, &AER_Character::MoveRight);
+		EnhancedInputComponent->BindAction(MoveLeftAction, ETriggerEvent::Triggered, this, &AER_Character::MoveLeft);
 	}
 }
-

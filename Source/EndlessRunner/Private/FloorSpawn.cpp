@@ -2,6 +2,9 @@
 
 
 #include "FloorSpawn.h"
+#include "../EndlessRunnerGameMode.h"
+#include "ER_Character.h"
+#include "Kismet/GameplayStatics.h"
 #include "Components/SceneComponent.h"
 #include "Components/StaticMeshComponent.h"
 #include "Components/ArrowComponent.h"
@@ -48,20 +51,47 @@ AFloorSpawn::AFloorSpawn()
 	FloorSpawnBox->SetCollisionProfileName(TEXT("OverlapOnlyPawn"));
 }
 
-const FTransform& AFloorSpawn::GetAttachTransform() const
-{
-	return AttachPoint->GetComponentTransform();
-}
-
 void AFloorSpawn::BeginPlay()
 {
 	Super::BeginPlay();
 	
+	RunGameMode = Cast<AEndlessRunnerGameMode>(UGameplayStatics::GetGameMode(GetWorld()));
+
+	check(RunGameMode);
+
+	FloorSpawnBox->OnComponentBeginOverlap.AddDynamic(this, &AFloorSpawn::OnFloorSpawnBoxOverlap);
 }
 
 void AFloorSpawn::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+}
+
+void AFloorSpawn::OnFloorSpawnBoxOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
+{
+	AER_Character* RunCharacter = Cast<AER_Character>(OtherActor);
+
+	if (RunCharacter)
+	{
+		RunGameMode->AddFloorSurface();
+
+		GetWorldTimerManager().SetTimer(DestroyHandle, this, &AFloorSpawn::DestroyFloorSurface, 2.0f, false);
+	}
+}
+
+void AFloorSpawn::DestroyFloorSurface()
+{
+	if (DestroyHandle.IsValid())
+	{
+		GetWorldTimerManager().ClearTimer(DestroyHandle);
+	}
+
+	this->Destroy();
+}
+
+const FTransform& AFloorSpawn::GetAttachTransform() const
+{
+	return AttachPoint->GetComponentTransform();
 }
 
