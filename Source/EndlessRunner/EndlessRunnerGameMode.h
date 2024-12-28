@@ -19,6 +19,9 @@ public:
 	UPROPERTY(EditAnywhere, Category = "Components")
 	TSubclassOf<class AFloorSpawn> FloorSpawnClass;
 
+	UPROPERTY(VisibleAnywhere)
+	int32 TotalCoins = 0;
+
 	UPROPERTY(EditAnywhere, Category = "Components")
 	int32 NumInitialFloorSurfaces = 10;
 
@@ -34,6 +37,9 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	class AFloorSpawn* AddFloorSurface(const bool bSpawnItems);
+
+	UFUNCTION(BlueprintCallable)
+	void AddCoin();
 
 protected:
 

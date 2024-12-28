@@ -73,3 +73,10 @@ AFloorSpawn* AEndlessRunnerGameMode::AddFloorSurface(const bool bSpawnItems)
 
 	return nullptr;
 }
+
+void AEndlessRunnerGameMode::AddCoin()
+{
+	TotalCoins += 1;
+
+	UE_LOG(LogTemp, Warning, TEXT("Total Coins: %d"), TotalCoins);
+}

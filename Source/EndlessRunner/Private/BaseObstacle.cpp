@@ -2,6 +2,7 @@
 
 
 #include "BaseObstacle.h"
+#include "ER_Character.h"
 #include "Components/SceneComponent.h"
 #include "Components/StaticMeshComponent.h"
 
@@ -15,4 +16,15 @@ ABaseObstacle::ABaseObstacle()
 	MeshComp = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("MeshComp"));
 	MeshComp->SetupAttachment(SceneComp);
 
+	MeshComp->OnComponentHit.AddDynamic(this, &ABaseObstacle::OnObstacleHit);
+}
+
+void ABaseObstacle::OnObstacleHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit)
+{
+	AER_Character* Character = Cast<AER_Character>(OtherActor);
+
+	if (Character)
+	{
+		Character->Death();
+	}
 }

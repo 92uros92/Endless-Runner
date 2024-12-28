@@ -8,6 +8,7 @@
 
 
 class ABaseObstacle;
+class ACoinPickup;
 
 UCLASS()
 class ENDLESSRUNNER_API AFloorSpawn : public AActor
@@ -18,6 +19,9 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Components")
 	TSubclassOf<ABaseObstacle> ObstacleClass;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Components")
+	TSubclassOf<ACoinPickup> CoinPickupClass;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components")
 	class USceneComponent* SceneComp;
@@ -52,7 +56,14 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components")
 	class UBoxComponent* FloorSpawnBox;
 
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components")
+	float SpawnPercent1 = 0.1f;
 
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components")
+	float SpawnPercent2 = 0.3f;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components")
+	float SpawnPercent3 = 0.5f;
 
 
 	AFloorSpawn();

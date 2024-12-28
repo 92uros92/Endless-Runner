@@ -7,12 +7,16 @@
 #include "InputActionValue.h"
 #include "ER_Character.generated.h"
 
+
 UCLASS()
 class ENDLESSRUNNER_API AER_Character : public ACharacter
 {
 	GENERATED_BODY()
 
 public:
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Sound")
+	class USoundBase* DeathSound;
 
 	UPROPERTY(VisibleInstanceOnly, BlueprintReadWrite, Category = "Lane")
 	int32 CurrentLane;
@@ -36,13 +40,13 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Lane")
 	void FinishedChangeLane();
 
+	UFUNCTION(BlueprintCallable)
+	void Death();
+
+	UFUNCTION()
+	void AddCoin();
+
 protected:
-
-	virtual void BeginPlay() override;
-
-	void MoveRight();
-
-	void MoveLeft();
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components")
 	class USpringArmComponent* SpringArm;
@@ -61,6 +65,21 @@ protected:
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input")
 	UInputAction* JumpAction;
+
+	UPROPERTY()
+	FTimerHandle RestartTimer;
+
+	UPROPERTY()
+	bool bIsDeath;
+
+	virtual void BeginPlay() override;
+
+	UFUNCTION()
+	void OnDeath();
+
+	void MoveRight();
+
+	void MoveLeft();
 
 private:
 

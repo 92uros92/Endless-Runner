@@ -8,6 +8,7 @@
 #include "GameFramework/SpringArmComponent.h"
 #include "Components/CapsuleComponent.h"
 #include "GameFramework/Controller.h"
+#include "Sound/SoundBase.h"
 
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
@@ -29,6 +30,8 @@ AER_Character::AER_Character()
 	
 	CurrentLane = 1;
 	NextLane = 0;
+
+	bIsDeath = false;
 }
 
 void AER_Character::BeginPlay()
@@ -70,6 +73,50 @@ void AER_Character::MoveLeft()
 {
 	NextLane = FMath::Clamp(CurrentLane - 1, 0, 2);
 	ChangeLane();
+}
+
+void AER_Character::OnDeath()
+{
+	bIsDeath = false;
+
+	if (RestartTimer.IsValid())
+	{
+		GetWorldTimerManager().ClearTimer(RestartTimer);
+	}
+
+	UKismetSystemLibrary::ExecuteConsoleCommand(GetWorld(), TEXT("RestartLevel"));
+}
+
+void AER_Character::Death()
+{
+	if (!bIsDeath)
+	{
+		//UE_LOG(LogTemp, Warning, TEXT("Character DIED!!"));
+
+		const FVector Location = GetActorLocation();
+
+		UWorld* World = GetWorld();
+
+		if (World)
+		{
+			bIsDeath = true;
+			DisableInput(nullptr);
+
+			if (DeathSound)
+			{
+				UGameplayStatics::PlaySoundAtLocation(World, DeathSound, Location);
+			}
+
+			GetMesh()->SetVisibility(false);
+
+			World->GetTimerManager().SetTimer(RestartTimer, this, &AER_Character::OnDeath, 1.0f);
+		}
+	}
+}
+
+void AER_Character::AddCoin()
+{
+	RunGameMode->AddCoin();
 }
 
 void AER_Character::Tick(float DeltaTime)

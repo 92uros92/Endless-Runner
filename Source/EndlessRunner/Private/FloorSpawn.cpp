@@ -5,6 +5,7 @@
 #include "../EndlessRunnerGameMode.h"
 #include "ER_Character.h"
 #include "BaseObstacle.h"
+#include "CoinPickup.h"
 #include "Kismet/GameplayStatics.h"
 #include "Components/SceneComponent.h"
 #include "Components/StaticMeshComponent.h"
@@ -76,7 +77,7 @@ void AFloorSpawn::OnFloorSpawnBoxOverlap(UPrimitiveComponent* OverlappedComponen
 
 void AFloorSpawn::SpawnItems()
 {
-	if (IsValid(ObstacleClass))
+	if (IsValid(ObstacleClass) && IsValid(CoinPickupClass))
 	{
 		SpawnLaneItem(CenterLane);
 		SpawnLaneItem(LeftLane);
@@ -92,9 +93,13 @@ void AFloorSpawn::SpawnLaneItem(UArrowComponent* Lane)
 
 	const FTransform& Location = Lane->GetComponentTransform();
 
-	if (UKismetMathLibrary::InRange_FloatFloat(RandValue, 0.5f, 1.0f, true, true))
+	if (UKismetMathLibrary::InRange_FloatFloat(RandValue, SpawnPercent1, SpawnPercent2, true, true))
 	{
 		ABaseObstacle* Obstacle = GetWorld()->SpawnActor<ABaseObstacle>(ObstacleClass, Location, SpawnParameters);
+	}
+	else if (UKismetMathLibrary::InRange_FloatFloat(RandValue, SpawnPercent3, 1.0f, true, true))
+	{
+		ACoinPickup* Coin = GetWorld()->SpawnActor<ACoinPickup>(CoinPickupClass, Location, SpawnParameters);
 	}
 }
 
