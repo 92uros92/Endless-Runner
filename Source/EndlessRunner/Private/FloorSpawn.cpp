@@ -4,18 +4,18 @@
 #include "FloorSpawn.h"
 #include "../EndlessRunnerGameMode.h"
 #include "ER_Character.h"
+#include "BaseObstacle.h"
 #include "Kismet/GameplayStatics.h"
 #include "Components/SceneComponent.h"
 #include "Components/StaticMeshComponent.h"
 #include "Components/ArrowComponent.h"
 #include "Components/BoxComponent.h"
+#include "Kismet/KismetMathLibrary.h"
 
 
 
 AFloorSpawn::AFloorSpawn()
 {
-	PrimaryActorTick.bCanEverTick = true;
-
 	SceneComp = CreateDefaultSubobject<USceneComponent>(TEXT("SceneComp"));
 	RootComponent = SceneComp;
 
@@ -62,21 +62,39 @@ void AFloorSpawn::BeginPlay()
 	FloorSpawnBox->OnComponentBeginOverlap.AddDynamic(this, &AFloorSpawn::OnFloorSpawnBoxOverlap);
 }
 
-void AFloorSpawn::Tick(float DeltaTime)
-{
-	Super::Tick(DeltaTime);
-
-}
-
 void AFloorSpawn::OnFloorSpawnBoxOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
 	AER_Character* RunCharacter = Cast<AER_Character>(OtherActor);
 
 	if (RunCharacter)
 	{
-		RunGameMode->AddFloorSurface();
+		RunGameMode->AddFloorSurface(true);
 
 		GetWorldTimerManager().SetTimer(DestroyHandle, this, &AFloorSpawn::DestroyFloorSurface, 2.0f, false);
+	}
+}
+
+void AFloorSpawn::SpawnItems()
+{
+	if (IsValid(ObstacleClass))
+	{
+		SpawnLaneItem(CenterLane);
+		SpawnLaneItem(LeftLane);
+		SpawnLaneItem(RightLane);
+	}
+}
+
+void AFloorSpawn::SpawnLaneItem(UArrowComponent* Lane)
+{
+	const float RandValue = FMath::RandRange(0.0f, 1.0f);
+	FActorSpawnParameters SpawnParameters;
+	SpawnParameters.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
+
+	const FTransform& Location = Lane->GetComponentTransform();
+
+	if (UKismetMathLibrary::InRange_FloatFloat(RandValue, 0.5f, 1.0f, true, true))
+	{
+		ABaseObstacle* Obstacle = GetWorld()->SpawnActor<ABaseObstacle>(ObstacleClass, Location, SpawnParameters);
 	}
 }
 
@@ -94,4 +112,3 @@ const FTransform& AFloorSpawn::GetAttachTransform() const
 {
 	return AttachPoint->GetComponentTransform();
 }
-

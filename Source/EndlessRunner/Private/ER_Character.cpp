@@ -35,6 +35,10 @@ void AER_Character::BeginPlay()
 {
 	Super::BeginPlay();
 	
+	RunGameMode = Cast<AEndlessRunnerGameMode>(UGameplayStatics::GetGameMode(GetWorld()));
+
+	check(RunGameMode);
+
 	if (APlayerController* PlayerController = Cast<APlayerController>(Controller))
 	{
 		if (UEnhancedInputLocalPlayerSubsystem* Subsystem = ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(PlayerController->GetLocalPlayer()))
@@ -42,22 +46,13 @@ void AER_Character::BeginPlay()
 			Subsystem->AddMappingContext(ERMappingContext, 0);
 		}
 	}
-
-	RunGameMode = Cast<AEndlessRunnerGameMode>(UGameplayStatics::GetGameMode(GetWorld()));
-
-	check(RunGameMode);
 }
 
 void AER_Character::UpdateChangeLane(const float Value)
 {
-	//const float CurrentValue = Value.Get<float>();
-
-	//if (CurrentValue)
-	//{
-		FVector Location = GetCapsuleComponent()->GetComponentLocation();
-		Location.Y = FMath::Lerp(RunGameMode->LaneSwitchValues[CurrentLane], RunGameMode->LaneSwitchValues[NextLane], Value);
-		SetActorLocation(Location);
-	//}
+	FVector Location = GetCapsuleComponent()->GetComponentLocation();
+	Location.Y = FMath::Lerp(RunGameMode->LaneSwitchValues[CurrentLane], RunGameMode->LaneSwitchValues[NextLane], Value);
+	SetActorLocation(Location);
 }
 
 void AER_Character::FinishedChangeLane()

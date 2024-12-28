@@ -7,6 +7,7 @@
 #include "FloorSpawn.generated.h"
 
 
+class ABaseObstacle;
 
 UCLASS()
 class ENDLESSRUNNER_API AFloorSpawn : public AActor
@@ -14,6 +15,9 @@ class ENDLESSRUNNER_API AFloorSpawn : public AActor
 	GENERATED_BODY()
 	
 public:	
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Components")
+	TSubclassOf<ABaseObstacle> ObstacleClass;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components")
 	class USceneComponent* SceneComp;
@@ -49,9 +53,14 @@ public:
 	class UBoxComponent* FloorSpawnBox;
 
 
+
+
 	AFloorSpawn();
 
 	const FTransform& GetAttachTransform() const;
+
+	UFUNCTION(BlueprintCallable)
+	void SpawnItems();
 
 protected:
 
@@ -73,10 +82,9 @@ protected:
 		const FHitResult& SweepResult);
 
 	UFUNCTION()
+	void SpawnLaneItem(UArrowComponent* Lane);
+
+	UFUNCTION()
 	void DestroyFloorSurface();
-
-public:	
-
-	virtual void Tick(float DeltaTime) override;
 
 };

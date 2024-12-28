@@ -33,7 +33,7 @@ public:
 	void CreateInitialFloorSurfaces();
 
 	UFUNCTION(BlueprintCallable)
-	class AFloorSpawn* AddFloorSurface();
+	class AFloorSpawn* AddFloorSurface(const bool bSpawnItems);
 
 protected:
 
