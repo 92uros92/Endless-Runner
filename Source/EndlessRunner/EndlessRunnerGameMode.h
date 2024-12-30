@@ -7,6 +7,8 @@
 #include "EndlessRunnerGameMode.generated.h"
 
 
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnCoinsCountChanged, int32, CoinsCount);
+
 UCLASS(minimalapi)
 class AEndlessRunnerGameMode : public AGameModeBase
 {
@@ -14,10 +16,14 @@ class AEndlessRunnerGameMode : public AGameModeBase
 
 public:
 
-	AEndlessRunnerGameMode();
+	UPROPERTY(EditAnywhere, Category = "Components")
+	TSubclassOf<class UUserWidget> GPWidgetClass;
 
 	UPROPERTY(EditAnywhere, Category = "Components")
 	TSubclassOf<class AFloorSpawn> FloorSpawnClass;
+
+	UPROPERTY(VisibleInstanceOnly, Category = "Runtime")
+	class UGamePlayWidget* GamePlayWidget;
 
 	UPROPERTY(VisibleAnywhere)
 	int32 TotalCoins = 0;
@@ -31,6 +37,10 @@ public:
 	UPROPERTY(VisibleInstanceOnly, Category = "Runtime")
 	TArray<float> LaneSwitchValues;
 
+	UPROPERTY(BlueprintAssignable, BlueprintCallable, Category = "Delegate")
+	FOnCoinsCountChanged OnCoinsCountChanged;
+
+	AEndlessRunnerGameMode();
 
 	UFUNCTION(BlueprintCallable)
 	void CreateInitialFloorSurfaces();

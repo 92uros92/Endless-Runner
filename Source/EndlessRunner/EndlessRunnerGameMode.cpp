@@ -3,8 +3,11 @@
 #include "EndlessRunnerGameMode.h"
 #include "EndlessRunnerCharacter.h"
 #include "FloorSpawn.h"
+#include "GamePlayWidget.h"
 #include "Components/ArrowComponent.h"
 #include "UObject/ConstructorHelpers.h"
+#include "Kismet/GameplayStatics.h"
+#include "Blueprint/UserWidget.h"
 
 
 
@@ -21,6 +24,14 @@ AEndlessRunnerGameMode::AEndlessRunnerGameMode()
 void AEndlessRunnerGameMode::BeginPlay()
 {
 	Super::BeginPlay();
+
+	UGameplayStatics::GetPlayerController(GetWorld(), 0)->bShowMouseCursor = true;
+
+	GamePlayWidget = Cast<UGamePlayWidget>(CreateWidget(GetWorld(), GPWidgetClass));
+	check(GamePlayWidget);
+
+	GamePlayWidget->InitializeWidget(this);
+	GamePlayWidget->AddToViewport();
 
 	CreateInitialFloorSurfaces();
 }
@@ -78,5 +89,6 @@ void AEndlessRunnerGameMode::AddCoin()
 {
 	TotalCoins += 1;
 
-	UE_LOG(LogTemp, Warning, TEXT("Total Coins: %d"), TotalCoins);
+	//UE_LOG(LogTemp, Warning, TEXT("Total Coins: %d"), TotalCoins);
+	OnCoinsCountChanged.Broadcast(TotalCoins);
 }
