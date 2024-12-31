@@ -24,6 +24,18 @@ public:
 
 protected:
 
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	TSubclassOf<class UUserWidget> PauseMenuWidgetClass;
+
 	UPROPERTY(BlueprintReadWrite, meta = (BindWidget))
 	class UTextBlock* CoinsCount;
+
+	UPROPERTY(BlueprintReadWrite, meta = (BindWidget))
+	class UButton* PauseButton;
+
+
+	UFUNCTION()
+	void OnPauseClick();
+
+	virtual void NativeConstruct() override;
 };
