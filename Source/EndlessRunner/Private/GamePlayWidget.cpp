@@ -27,14 +27,21 @@ void UGamePlayWidget::InitializeWidget(AEndlessRunnerGameMode* RunGameMode)
 	if (RunGameMode)
 	{
 		CoinsCount->SetText(FText::AsNumber(0));
+		LivesCount->SetText(FText::AsNumber(RunGameMode->MaxLives));
 
 		RunGameMode->OnCoinsCountChanged.AddDynamic(this, &UGamePlayWidget::SetCoinsCount);
+		RunGameMode->OnLivesCountChanged.AddDynamic(this, &UGamePlayWidget::SetLivesCount);
 	}
 }
 
 void UGamePlayWidget::SetCoinsCount(const int32 Count)
 {
 	CoinsCount->SetText(FText::AsNumber(Count));
+}
+
+void UGamePlayWidget::SetLivesCount(const int32 Count)
+{
+	LivesCount->SetText(FText::AsNumber(Count));
 }
 
 void UGamePlayWidget::OnPauseClick()

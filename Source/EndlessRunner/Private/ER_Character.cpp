@@ -9,6 +9,7 @@
 #include "Components/CapsuleComponent.h"
 #include "GameFramework/Controller.h"
 #include "Sound/SoundBase.h"
+#include "GameFramework/PlayerStart.h"
 
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
@@ -41,6 +42,10 @@ void AER_Character::BeginPlay()
 	RunGameMode = Cast<AEndlessRunnerGameMode>(UGameplayStatics::GetGameMode(GetWorld()));
 
 	check(RunGameMode);
+
+	RunGameMode->OnLevelReset.AddDynamic(this, &AER_Character::ResetLevel);
+
+	PlayerStart = Cast<APlayerStart>(UGameplayStatics::GetActorOfClass(GetWorld(), APlayerStart::StaticClass()));
 
 	if (APlayerController* PlayerController = Cast<APlayerController>(Controller))
 	{
@@ -75,6 +80,19 @@ void AER_Character::MoveLeft()
 	ChangeLane();
 }
 
+void AER_Character::ResetLevel()
+{
+	bIsDeath = false;
+	EnableInput(nullptr);
+	GetMesh()->SetVisibility(true);
+
+	if (PlayerStart)
+	{
+		SetActorLocation(PlayerStart->GetActorLocation());
+		SetActorRotation(PlayerStart->GetActorRotation());
+	}
+}
+
 void AER_Character::OnDeath()
 {
 	bIsDeath = false;
@@ -84,7 +102,7 @@ void AER_Character::OnDeath()
 		GetWorldTimerManager().ClearTimer(RestartTimer);
 	}
 
-	UKismetSystemLibrary::ExecuteConsoleCommand(GetWorld(), TEXT("RestartLevel"));
+	RunGameMode->PlayerDied();
 }
 
 void AER_Character::Death()

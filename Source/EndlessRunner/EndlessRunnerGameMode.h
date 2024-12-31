@@ -8,6 +8,9 @@
 
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnCoinsCountChanged, int32, CoinsCount);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnLivesCountChanged, int32, LivesCount);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnLevelReset);
+
 
 UCLASS(minimalapi)
 class AEndlessRunnerGameMode : public AGameModeBase
@@ -28,6 +31,12 @@ public:
 	UPROPERTY(VisibleAnywhere)
 	int32 TotalCoins = 0;
 
+	UPROPERTY(VisibleAnywhere)
+	int32 NumOfLives = 0;
+
+	UPROPERTY(EditAnywhere)
+	int32 MaxLives = 3;
+
 	UPROPERTY(EditAnywhere, Category = "Components")
 	int32 NumInitialFloorSurfaces = 10;
 
@@ -37,8 +46,18 @@ public:
 	UPROPERTY(VisibleInstanceOnly, Category = "Runtime")
 	TArray<float> LaneSwitchValues;
 
+	UPROPERTY(VisibleInstanceOnly, Category = "Runtime")
+	TArray<AFloorSpawn*> FloorSurfaces;
+
 	UPROPERTY(BlueprintAssignable, BlueprintCallable, Category = "Delegate")
 	FOnCoinsCountChanged OnCoinsCountChanged;
+
+	UPROPERTY(BlueprintAssignable, BlueprintCallable, Category = "Delegate")
+	FOnLivesCountChanged OnLivesCountChanged;
+
+	UPROPERTY(BlueprintAssignable, BlueprintCallable, Category = "Delegate")
+	FOnLevelReset OnLevelReset;
+
 
 	AEndlessRunnerGameMode();
 
@@ -50,6 +69,12 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	void AddCoin();
+
+	UFUNCTION(BlueprintCallable)
+	void PlayerDied();
+
+	UFUNCTION(BlueprintCallable)
+	void RemoveSurface(AFloorSpawn* Surface);
 
 protected:
 

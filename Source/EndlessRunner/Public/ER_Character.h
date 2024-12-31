@@ -70,7 +70,11 @@ protected:
 	FTimerHandle RestartTimer;
 
 	UPROPERTY()
+	class APlayerStart* PlayerStart;
+
+	UPROPERTY()
 	bool bIsDeath;
+
 
 	virtual void BeginPlay() override;
 
@@ -80,6 +84,9 @@ protected:
 	void MoveRight();
 
 	void MoveLeft();
+
+	UFUNCTION()
+	void ResetLevel();
 
 private:
 

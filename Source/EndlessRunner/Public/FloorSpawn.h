@@ -56,6 +56,9 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components")
 	class UBoxComponent* FloorSpawnBox;
 
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	TArray<AActor*> ChildActors;
+
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components")
 	float SpawnPercent1 = 0.1f;
 
@@ -72,6 +75,11 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	void SpawnItems();
+
+	UFUNCTION(BlueprintCallable)
+	void DestroyFloorSurface();
+
+
 
 protected:
 
@@ -94,8 +102,5 @@ protected:
 
 	UFUNCTION()
 	void SpawnLaneItem(UArrowComponent* Lane);
-
-	UFUNCTION()
-	void DestroyFloorSurface();
 
 };

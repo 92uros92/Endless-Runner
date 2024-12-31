@@ -33,6 +33,8 @@ void AEndlessRunnerGameMode::BeginPlay()
 	GamePlayWidget->InitializeWidget(this);
 	GamePlayWidget->AddToViewport();
 
+	NumOfLives = MaxLives;
+
 	CreateInitialFloorSurfaces();
 }
 
@@ -71,6 +73,8 @@ AFloorSpawn* AEndlessRunnerGameMode::AddFloorSurface(const bool bSpawnItems)
 
 		if (FloorSpawn)
 		{
+			FloorSurfaces.Add(FloorSpawn);
+
 			if (bSpawnItems)
 			{
 				FloorSpawn->SpawnItems();
@@ -91,4 +95,40 @@ void AEndlessRunnerGameMode::AddCoin()
 
 	//UE_LOG(LogTemp, Warning, TEXT("Total Coins: %d"), TotalCoins);
 	OnCoinsCountChanged.Broadcast(TotalCoins);
+}
+
+void AEndlessRunnerGameMode::PlayerDied()
+{
+	NumOfLives -= 1;
+	OnLivesCountChanged.Broadcast(NumOfLives);
+
+	if (NumOfLives > 0)
+	{
+		// Iterate all FloorSurfaces and call DestroyFloorSurface
+		for (AFloorSpawn* Surface : FloorSurfaces)
+		{
+			Surface->DestroyFloorSurface();
+		}
+
+		// Empty array
+		FloorSurfaces.Empty();
+
+		// Set NextSpawnPoint to initial value 
+		NextFloorSpawnPoint = FTransform();
+
+		// Create initial floor surfaces
+		CreateInitialFloorSurfaces();
+
+		// Broadcast level reset event
+		OnLevelReset.Broadcast();
+	}
+	else
+	{
+		// GameOver();
+	}
+}
+
+void AEndlessRunnerGameMode::RemoveSurface(AFloorSpawn* Surface)
+{
+	FloorSurfaces.Remove(Surface);
 }

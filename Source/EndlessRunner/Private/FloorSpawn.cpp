@@ -96,10 +96,12 @@ void AFloorSpawn::SpawnLaneItem(UArrowComponent* Lane)
 	if (UKismetMathLibrary::InRange_FloatFloat(RandValue, SpawnPercent1, SpawnPercent2, true, true))
 	{
 		ABaseObstacle* Obstacle = GetWorld()->SpawnActor<ABaseObstacle>(ObstacleClass, Location, SpawnParameters);
+		ChildActors.Add(Obstacle);
 	}
 	else if (UKismetMathLibrary::InRange_FloatFloat(RandValue, SpawnPercent3, 1.0f, true, true))
 	{
 		ACoinPickup* Coin = GetWorld()->SpawnActor<ACoinPickup>(CoinPickupClass, Location, SpawnParameters);
+		ChildActors.Add(Coin);
 	}
 }
 
@@ -109,6 +111,18 @@ void AFloorSpawn::DestroyFloorSurface()
 	{
 		GetWorldTimerManager().ClearTimer(DestroyHandle);
 	}
+
+	for (auto Child : ChildActors)
+	{
+		if (IsValid(Child))
+		{
+			Child->Destroy();
+		}
+	}
+
+	ChildActors.Empty();
+
+	RunGameMode->RemoveSurface(this);
 
 	this->Destroy();
 }
