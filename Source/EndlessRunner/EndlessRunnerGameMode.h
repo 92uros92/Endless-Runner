@@ -29,16 +29,16 @@ public:
 	class UGamePlayWidget* GamePlayWidget;
 
 	UPROPERTY(VisibleAnywhere)
-	int32 TotalCoins = 0;
+	int32 TotalCoins;
 
 	UPROPERTY(VisibleAnywhere)
-	int32 NumOfLives = 0;
+	int32 NumOfLives;
 
 	UPROPERTY(EditAnywhere)
-	int32 MaxLives = 3;
+	int32 MaxLives;
 
 	UPROPERTY(EditAnywhere, Category = "Components")
-	int32 NumInitialFloorSurfaces = 10;
+	int32 NumInitialFloorSurfaces;
 
 	UPROPERTY(VisibleInstanceOnly, Category = "Runtime")
 	FTransform NextFloorSpawnPoint;

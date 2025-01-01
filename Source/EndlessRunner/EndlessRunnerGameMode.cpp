@@ -19,6 +19,11 @@ AEndlessRunnerGameMode::AEndlessRunnerGameMode()
 	{
 		DefaultPawnClass = PlayerPawnBPClass.Class;
 	}
+
+	TotalCoins = 0;
+	NumOfLives = 0;
+	MaxLives = 3;
+	NumInitialFloorSurfaces = 10;
 }
 
 void AEndlessRunnerGameMode::BeginPlay()
@@ -105,7 +110,7 @@ void AEndlessRunnerGameMode::PlayerDied()
 	if (NumOfLives > 0)
 	{
 		// Iterate all FloorSurfaces and call DestroyFloorSurface
-		for (AFloorSpawn* Surface : FloorSurfaces)
+		for (auto Surface : FloorSurfaces)
 		{
 			Surface->DestroyFloorSurface();
 		}
@@ -130,5 +135,8 @@ void AEndlessRunnerGameMode::PlayerDied()
 
 void AEndlessRunnerGameMode::RemoveSurface(AFloorSpawn* Surface)
 {
-	FloorSurfaces.Remove(Surface);
+	if (FloorSurfaces.Contains(Surface))
+	{
+		FloorSurfaces.Remove(Surface);
+	}
 }

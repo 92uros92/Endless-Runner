@@ -95,7 +95,7 @@ void AER_Character::ResetLevel()
 
 void AER_Character::OnDeath()
 {
-	bIsDeath = false;
+	//bIsDeath = false;
 
 	if (RestartTimer.IsValid())
 	{
