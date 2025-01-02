@@ -95,8 +95,6 @@ void AER_Character::ResetLevel()
 
 void AER_Character::OnDeath()
 {
-	//bIsDeath = false;
-
 	if (RestartTimer.IsValid())
 	{
 		GetWorldTimerManager().ClearTimer(RestartTimer);
