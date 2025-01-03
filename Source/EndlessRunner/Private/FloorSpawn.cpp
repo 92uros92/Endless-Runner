@@ -122,7 +122,14 @@ void AFloorSpawn::DestroyFloorSurface()
 
 	ChildActors.Empty();
 
-	RunGameMode->RemoveSurface(this);
+	for (auto Floor : FloorSurfaces)
+	{
+		if (IsValid(Floor))
+		{
+			Floor->Destroy();
+		}
+	}
+	//RunGameMode->RemoveSurface(this);
 
 	this->Destroy();
 }

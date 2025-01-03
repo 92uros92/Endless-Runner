@@ -59,6 +59,9 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	TArray<AActor*> ChildActors;
 
+	UPROPERTY(VisibleInstanceOnly, Category = "Runtime")
+	TArray<AFloorSpawn*> FloorSurfaces;
+
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components")
 	float SpawnPercent1 = 0.1f;
 

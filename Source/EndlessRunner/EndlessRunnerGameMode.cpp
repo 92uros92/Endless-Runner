@@ -148,6 +148,15 @@ void AEndlessRunnerGameMode::GameOver()
 
 void AEndlessRunnerGameMode::RemoveSurface(AFloorSpawn* Surface)
 {
+	/*TArray<AActor*> Floors;
+
+	UGameplayStatics::GetAllActorsOfClass(GetWorld(), AFloorSpawn::StaticClass(), Floors);
+
+	for (auto Floor : Floors)
+	{
+
+	}*/
+
 	if (FloorSurfaces.Contains(Surface))
 	{
 		FloorSurfaces.Remove(Surface);
