@@ -25,6 +25,9 @@ public:
 	UPROPERTY(EditAnywhere, Category = "Components")
 	TSubclassOf<class AFloorSpawn> FloorSpawnClass;
 
+	UPROPERTY(EditAnywhere, Category = "Components")
+	TSubclassOf<class UUserWidget> GameOverScreenClass;
+
 	UPROPERTY(VisibleInstanceOnly, Category = "Runtime")
 	class UGamePlayWidget* GamePlayWidget;
 
@@ -66,6 +69,9 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	class AFloorSpawn* AddFloorSurface(const bool bSpawnItems);
+
+	UFUNCTION(BlueprintCallable)
+	void GameOver();
 
 	UFUNCTION(BlueprintCallable)
 	void AddCoin();

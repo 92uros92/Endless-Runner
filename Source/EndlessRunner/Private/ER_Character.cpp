@@ -43,10 +43,6 @@ void AER_Character::BeginPlay()
 
 	check(RunGameMode);
 
-	RunGameMode->OnLevelReset.AddDynamic(this, &AER_Character::ResetLevel);
-
-	PlayerStart = Cast<APlayerStart>(UGameplayStatics::GetActorOfClass(GetWorld(), APlayerStart::StaticClass()));
-
 	if (APlayerController* PlayerController = Cast<APlayerController>(Controller))
 	{
 		if (UEnhancedInputLocalPlayerSubsystem* Subsystem = ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(PlayerController->GetLocalPlayer()))
@@ -54,6 +50,12 @@ void AER_Character::BeginPlay()
 			Subsystem->AddMappingContext(ERMappingContext, 0);
 		}
 	}
+
+	RunGameMode->OnLevelReset.AddDynamic(this, &AER_Character::ResetLevel);
+
+	PlayerStart = Cast<APlayerStart>(UGameplayStatics::GetActorOfClass(GetWorld(), APlayerStart::StaticClass()));
+
+
 }
 
 void AER_Character::UpdateChangeLane(const float Value)

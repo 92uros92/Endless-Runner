@@ -21,8 +21,8 @@ AEndlessRunnerGameMode::AEndlessRunnerGameMode()
 	}
 
 	TotalCoins = 0;
-	NumOfLives = 0;
 	MaxLives = 3;
+	NumOfLives = 0;
 	NumInitialFloorSurfaces = 10;
 }
 
@@ -129,7 +129,20 @@ void AEndlessRunnerGameMode::PlayerDied()
 	}
 	else
 	{
-		// GameOver();
+		GameOver();
+	}
+}
+
+void AEndlessRunnerGameMode::GameOver()
+{
+	if (IsValid(GameOverScreenClass))
+	{
+		UUserWidget* Widget = CreateWidget(GetWorld(), GameOverScreenClass);
+
+		if (Widget)
+		{
+			Widget->AddToViewport();
+		}
 	}
 }
 
