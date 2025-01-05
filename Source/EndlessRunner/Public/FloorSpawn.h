@@ -69,7 +69,7 @@ public:
 	float SpawnPercent2 = 0.3f;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components")
-	float SpawnPercent3 = 0.5f;
+	float SpawnPercent3 = 0.8f;
 
 
 	AFloorSpawn();

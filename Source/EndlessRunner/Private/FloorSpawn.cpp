@@ -122,7 +122,7 @@ void AFloorSpawn::DestroyFloorSurface()
 
 	ChildActors.Empty();
 
-	for (auto Floor : FloorSurfaces)
+	for (AFloorSpawn* Floor : FloorSurfaces)
 	{
 		if (IsValid(Floor))
 		{

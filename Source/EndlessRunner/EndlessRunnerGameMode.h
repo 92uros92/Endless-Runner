@@ -31,8 +31,14 @@ public:
 	UPROPERTY(VisibleInstanceOnly, Category = "Runtime")
 	class UGamePlayWidget* GamePlayWidget;
 
-	UPROPERTY(VisibleAnywhere)
+	UPROPERTY(VisibleAnywhere, Category = "Score")
 	int32 TotalCoins;
+
+	UPROPERTY(VisibleAnywhere, Category = "Score")
+	int32 HighScore;
+
+	UPROPERTY(VisibleAnywhere, Category = "Score")
+	class UER_SaveGame* SaveGameInstance;
 
 	UPROPERTY(VisibleAnywhere)
 	int32 NumOfLives;
@@ -81,6 +87,12 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	void RemoveSurface(AFloorSpawn* Surface);
+
+	UFUNCTION(BlueprintCallable)
+	void SaveHighScore();
+
+	UFUNCTION(BlueprintCallable)
+	void LoadHighScore();
 
 protected:
 

@@ -4,6 +4,7 @@
 #include "EndlessRunnerCharacter.h"
 #include "FloorSpawn.h"
 #include "GamePlayWidget.h"
+#include "ER_SaveGame.h"
 #include "Components/ArrowComponent.h"
 #include "UObject/ConstructorHelpers.h"
 #include "Kismet/GameplayStatics.h"
@@ -31,6 +32,8 @@ void AEndlessRunnerGameMode::BeginPlay()
 	Super::BeginPlay();
 
 	UGameplayStatics::GetPlayerController(GetWorld(), 0)->bShowMouseCursor = true;
+
+	LoadHighScore();
 
 	GamePlayWidget = Cast<UGamePlayWidget>(CreateWidget(GetWorld(), GPWidgetClass));
 	check(GamePlayWidget);
@@ -100,6 +103,42 @@ void AEndlessRunnerGameMode::AddCoin()
 
 	//UE_LOG(LogTemp, Warning, TEXT("Total Coins: %d"), TotalCoins);
 	OnCoinsCountChanged.Broadcast(TotalCoins);
+
+	if (TotalCoins > HighScore)
+	{
+		HighScore = TotalCoins;
+		SaveHighScore();
+	}
+}
+
+void AEndlessRunnerGameMode::SaveHighScore()
+{
+	SaveGameInstance = Cast<UER_SaveGame>(UGameplayStatics::CreateSaveGameObject(UER_SaveGame::StaticClass()));
+
+	if (SaveGameInstance)
+	{
+		SaveGameInstance->HighScore = HighScore;
+
+		UGameplayStatics::SaveGameToSlot(SaveGameInstance, TEXT("HighScoreSlot"), 0);
+	}
+}
+
+void AEndlessRunnerGameMode::LoadHighScore()
+{
+	if (UGameplayStatics::DoesSaveGameExist(TEXT("HighScoreSlot"), 0))
+	{
+		SaveGameInstance = Cast<UER_SaveGame>(UGameplayStatics::LoadGameFromSlot(TEXT("HighScoreSlot"), 0));
+
+		if (SaveGameInstance)
+		{
+			HighScore = SaveGameInstance->HighScore;
+			UE_LOG(LogTemp, Warning, TEXT("High Score: %i"), HighScore);
+		}
+	}
+	else
+	{
+		HighScore = 0;
+	}
 }
 
 void AEndlessRunnerGameMode::PlayerDied()
