@@ -16,8 +16,14 @@ class ENDLESSRUNNER_API UMainMenuWidget : public UUserWidget
 	
 protected:
 
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	TSubclassOf<class UUserWidget> HighScoreWidgetClass;
+
 	UPROPERTY(BlueprintReadWrite, meta = (BindWidget))
 	class UButton* StartButton;
+
+	UPROPERTY(BlueprintReadWrite, meta = (BindWidget))
+	class UButton* HighScoreButton;
 
 	UPROPERTY(BlueprintReadWrite, meta = (BindWidget))
 	class UButton* ExitButton;
@@ -25,6 +31,9 @@ protected:
 
 	UFUNCTION()
 	void OnStartClick();
+
+	UFUNCTION()
+	void OnHighScoreClick();
 
 	UFUNCTION()
 	void OnExitClick();

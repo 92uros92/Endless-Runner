@@ -100,8 +100,8 @@ AFloorSpawn* AEndlessRunnerGameMode::AddFloorSurface(const bool bSpawnItems)
 void AEndlessRunnerGameMode::AddCoin()
 {
 	TotalCoins += 1;
-
 	//UE_LOG(LogTemp, Warning, TEXT("Total Coins: %d"), TotalCoins);
+
 	OnCoinsCountChanged.Broadcast(TotalCoins);
 
 	if (TotalCoins > HighScore)
