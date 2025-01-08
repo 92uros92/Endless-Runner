@@ -3,6 +3,7 @@
 
 #include "HighScoreWidget.h"
 #include "../EndlessRunnerGameMode.h"
+#include "ER_SaveGame.h"
 #include "Components/TextBlock.h"
 #include "Components/Button.h"
 #include "Blueprint/WidgetBlueprintLibrary.h"
@@ -18,16 +19,18 @@ void UHighScoreWidget::NativeConstruct()
 		MainMenuButton->OnClicked.AddDynamic(this, &UHighScoreWidget::OnMainMenuButtonClick);
 	}
 
-	UWidgetBlueprintLibrary::SetInputMode_GameAndUIEx(UGameplayStatics::GetPlayerController(GetWorld(), 0), this);
+	//UWidgetBlueprintLibrary::SetInputMode_GameAndUIEx(UGameplayStatics::GetPlayerController(GetWorld(), 0), this);
 }
 
 void UHighScoreWidget::InitializeWidget(AEndlessRunnerGameMode* RunGameMode)
 {
 	if (RunGameMode)
 	{
-		HighScoreCount->SetText(FText::AsNumber(0));
+		RunGameMode->LoadHighScore();
 
-		RunGameMode->OnCoinsCountChanged.AddDynamic(this, &UHighScoreWidget::SetHighScoreCountt);
+		HighScoreCount->SetText(FText::AsNumber(ERSaveGame->HighScore));
+
+		RunGameMode->OnHighScoreChanged.AddDynamic(this, &UHighScoreWidget::SetHighScoreCount);
 	}
 }
 
@@ -41,9 +44,9 @@ void UHighScoreWidget::OnMainMenuButtonClick()
 	}
 }
 
-void UHighScoreWidget::SetHighScoreCountt(int32 Count)
+void UHighScoreWidget::SetHighScoreCount(int32 Count)
 {
-	Count = ERGameMode->HighScore;
+	Count = ERSaveGame->HighScore;
 	HighScoreCount->SetText(FText::AsNumber(Count));
 }
 

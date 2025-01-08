@@ -20,7 +20,7 @@ public:
 	void InitializeWidget(class AEndlessRunnerGameMode* RunGameMode);
 
 	UFUNCTION(BlueprintCallable)
-	void SetHighScoreCountt(int32 Count);
+	void SetHighScoreCount(int32 Count);
 
 protected:
 
@@ -32,6 +32,9 @@ protected:
 
 	UPROPERTY(BlueprintReadOnly)
 	class AEndlessRunnerGameMode* ERGameMode;
+
+	UPROPERTY(BlueprintReadOnly)
+	class UER_SaveGame* ERSaveGame;
 
 
 	virtual void NativeConstruct() override;

@@ -9,6 +9,7 @@
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnCoinsCountChanged, int32, CoinsCount);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnLivesCountChanged, int32, LivesCount);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnHighScoreChanged, int32, NewHighScore);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnLevelReset);
 
 
@@ -58,13 +59,16 @@ public:
 	UPROPERTY(VisibleInstanceOnly, Category = "Runtime")
 	TArray<AFloorSpawn*> FloorSurfaces;
 
-	UPROPERTY(BlueprintAssignable, BlueprintCallable, Category = "Delegate")
+	UPROPERTY(BlueprintAssignable, BlueprintCallable, Category = "Events")
 	FOnCoinsCountChanged OnCoinsCountChanged;
 
-	UPROPERTY(BlueprintAssignable, BlueprintCallable, Category = "Delegate")
+	UPROPERTY(BlueprintAssignable, BlueprintCallable, Category = "Events")
 	FOnLivesCountChanged OnLivesCountChanged;
 
-	UPROPERTY(BlueprintAssignable, BlueprintCallable, Category = "Delegate")
+	UPROPERTY(BlueprintAssignable, BlueprintCallable, Category = "Events")
+	FOnHighScoreChanged OnHighScoreChanged;
+
+	UPROPERTY(BlueprintAssignable, BlueprintCallable, Category = "Events")
 	FOnLevelReset OnLevelReset;
 
 

@@ -107,6 +107,7 @@ void AEndlessRunnerGameMode::AddCoin()
 	if (TotalCoins > HighScore)
 	{
 		HighScore = TotalCoins;
+		
 		SaveHighScore();
 	}
 }
@@ -118,6 +119,8 @@ void AEndlessRunnerGameMode::SaveHighScore()
 	if (SaveGameInstance)
 	{
 		SaveGameInstance->HighScore = HighScore;
+
+		OnHighScoreChanged.Broadcast(HighScore); 
 
 		UGameplayStatics::SaveGameToSlot(SaveGameInstance, TEXT("HighScoreSlot"), 0);
 	}
@@ -132,6 +135,7 @@ void AEndlessRunnerGameMode::LoadHighScore()
 		if (SaveGameInstance)
 		{
 			HighScore = SaveGameInstance->HighScore;
+			
 			UE_LOG(LogTemp, Warning, TEXT("High Score: %i"), HighScore);
 		}
 	}
