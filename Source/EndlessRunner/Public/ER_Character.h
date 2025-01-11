@@ -18,6 +18,9 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Sound")
 	class USoundBase* DeathSound;
 
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Sound")
+	class USoundWave* BackgroundSounWave;
+
 	UPROPERTY(VisibleInstanceOnly, BlueprintReadWrite, Category = "Lane")
 	int32 CurrentLane;
 

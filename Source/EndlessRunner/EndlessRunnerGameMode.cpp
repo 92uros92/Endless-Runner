@@ -44,6 +44,7 @@ void AEndlessRunnerGameMode::BeginPlay()
 	NumOfLives = MaxLives;
 
 	CreateInitialFloorSurfaces();
+
 }
 
 void AEndlessRunnerGameMode::CreateInitialFloorSurfaces()

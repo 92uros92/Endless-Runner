@@ -51,6 +51,11 @@ void AER_Character::BeginPlay()
 		}
 	}
 
+	if (BackgroundSounWave)
+	{
+		UGameplayStatics::PlaySound2D(GetWorld(), BackgroundSounWave);
+	}
+
 	RunGameMode->OnLevelReset.AddDynamic(this, &AER_Character::ResetLevel);
 
 	PlayerStart = Cast<APlayerStart>(UGameplayStatics::GetActorOfClass(GetWorld(), APlayerStart::StaticClass()));
