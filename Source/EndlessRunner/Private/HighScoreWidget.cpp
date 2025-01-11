@@ -26,7 +26,7 @@ void UHighScoreWidget::InitializeWidget(AEndlessRunnerGameMode* RunGameMode)
 {
 	if (RunGameMode)
 	{
-		RunGameMode->LoadHighScore();
+		//RunGameMode->LoadHighScore();
 
 		HighScoreCount->SetText(FText::AsNumber(ERSaveGame->HighScore));
 
@@ -46,7 +46,7 @@ void UHighScoreWidget::OnMainMenuButtonClick()
 
 void UHighScoreWidget::SetHighScoreCount(int32 Count)
 {
-	Count = ERSaveGame->HighScore;
+	//Count = ERSaveGame->HighScore;
 	HighScoreCount->SetText(FText::AsNumber(Count));
 }
 

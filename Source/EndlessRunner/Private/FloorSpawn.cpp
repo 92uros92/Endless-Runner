@@ -129,6 +129,9 @@ void AFloorSpawn::DestroyFloorSurface()
 			Floor->Destroy();
 		}
 	}
+
+	FloorSurfaces.Empty();
+	
 	//RunGameMode->RemoveSurface(this);
 
 	this->Destroy();

@@ -18,6 +18,7 @@ public:
 
 	UER_SaveGame();
 
-	UPROPERTY(VisibleAnywhere, Category = "Score")
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Score")
 	int32 HighScore;
+
 };

@@ -35,7 +35,7 @@ public:
 	UPROPERTY(VisibleAnywhere, Category = "Score")
 	int32 TotalCoins;
 
-	UPROPERTY(VisibleAnywhere, Category = "Score")
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Score")
 	int32 HighScore;
 
 	UPROPERTY(VisibleAnywhere, Category = "Score")
