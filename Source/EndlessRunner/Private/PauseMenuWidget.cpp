@@ -23,6 +23,11 @@ void UPauseMenuWidget::NativeConstruct()
 	{
 		RestartButton->OnClicked.AddDynamic(this, &UPauseMenuWidget::OnRestartClick);
 	}
+
+	if (MainMenuButton)
+	{
+		MainMenuButton->OnClicked.AddDynamic(this, &UPauseMenuWidget::OnMainMenuClick);
+	}
 }
 
 void UPauseMenuWidget::OnContinueClick()
@@ -34,4 +39,14 @@ void UPauseMenuWidget::OnContinueClick()
 void UPauseMenuWidget::OnRestartClick()
 {
 	UKismetSystemLibrary::ExecuteConsoleCommand(GetWorld(), TEXT("RestartLevel"));
+}
+
+void UPauseMenuWidget::OnMainMenuClick()
+{
+	UWorld* World = GetWorld();
+
+	if (World)
+	{
+		UGameplayStatics::OpenLevel(World, TEXT("MainMenu"));
+	}
 }

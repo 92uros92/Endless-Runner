@@ -22,11 +22,13 @@ AER_Character::AER_Character()
 	PrimaryActorTick.bCanEverTick = true;
 
 	SpringArm = CreateDefaultSubobject<USpringArmComponent>(TEXT("SpringArm"));
+	SpringArm->TargetArmLength = 450.0f;
+	SpringArm->SocketOffset = FVector(0.0f, 0.0f, 150.0f);
 	SpringArm->bUsePawnControlRotation = true;
 	SpringArm->SetupAttachment(RootComponent);
 
 	CameraComp = CreateDefaultSubobject<UCameraComponent>(TEXT("CameraComp"));
-	SpringArm->bUsePawnControlRotation = false;
+	CameraComp->bUsePawnControlRotation = false;
 	CameraComp->SetupAttachment(SpringArm, USpringArmComponent::SocketName);
 	
 	CurrentLane = 1;

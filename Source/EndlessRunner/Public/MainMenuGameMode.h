@@ -19,6 +19,9 @@ public:
 	UPROPERTY(EditAnywhere, Category = "Components")
 	TSubclassOf<class UUserWidget> MainMenuScreenClass;
 
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Sound")
+	class USoundWave* AmbientSounWave;
+
 
 	virtual void BeginPlay() override;
 };

@@ -20,7 +20,10 @@ protected:
 	class UButton* ContinueButton;
 
 	UPROPERTY(BlueprintReadWrite, meta = (BindWidget))
-	class UButton* RestartButton;
+	UButton* RestartButton;
+
+	UPROPERTY(BlueprintReadWrite, meta = (BindWidget))
+	UButton* MainMenuButton;
 
 
 	UFUNCTION()
@@ -28,6 +31,9 @@ protected:
 
 	UFUNCTION()
 	void OnRestartClick();
+
+	UFUNCTION()
+	void OnMainMenuClick();
 
 	virtual void NativeConstruct() override;
 

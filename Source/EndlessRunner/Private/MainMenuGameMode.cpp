@@ -3,6 +3,7 @@
 
 #include "MainMenuGameMode.h"
 #include "Blueprint/UserWidget.h"
+#include "Kismet/GameplayStatics.h"
 
 
 
@@ -17,6 +18,11 @@ void AMainMenuGameMode::BeginPlay()
 		if (Widget)
 		{
 			Widget->AddToViewport();
+		}
+
+		if (AmbientSounWave)
+		{
+			UGameplayStatics::PlaySound2D(GetWorld(), AmbientSounWave);
 		}
 	}
 }

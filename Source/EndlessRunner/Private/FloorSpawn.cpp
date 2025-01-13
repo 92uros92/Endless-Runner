@@ -77,7 +77,7 @@ void AFloorSpawn::OnFloorSpawnBoxOverlap(UPrimitiveComponent* OverlappedComponen
 
 void AFloorSpawn::SpawnItems()
 {
-	if (IsValid(ObstacleClass) && IsValid(CoinPickupClass))
+	if (IsValid(YellowObstacleClass) && IsValid(BlueObstacleClass) && IsValid(CoinPickupClass))
 	{
 		SpawnLaneItem(CenterLane);
 		SpawnLaneItem(LeftLane);
@@ -95,7 +95,12 @@ void AFloorSpawn::SpawnLaneItem(UArrowComponent* Lane)
 
 	if (UKismetMathLibrary::InRange_FloatFloat(RandValue, SpawnPercent1, SpawnPercent2, true, true))
 	{
-		ABaseObstacle* Obstacle = GetWorld()->SpawnActor<ABaseObstacle>(ObstacleClass, Location, SpawnParameters);
+		ABaseObstacle* Obstacle = GetWorld()->SpawnActor<ABaseObstacle>(YellowObstacleClass, Location, SpawnParameters);
+		ChildActors.Add(Obstacle);
+	}
+	else if (UKismetMathLibrary::InRange_FloatFloat(RandValue, SpawnPercent2, SpawnPercent3, true, true))
+	{
+		ABaseObstacle* Obstacle = GetWorld()->SpawnActor<ABaseObstacle>(BlueObstacleClass, Location, SpawnParameters);
 		ChildActors.Add(Obstacle);
 	}
 	else if (UKismetMathLibrary::InRange_FloatFloat(RandValue, SpawnPercent3, 1.0f, true, true))
