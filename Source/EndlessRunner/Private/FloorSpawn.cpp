@@ -1,4 +1,4 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+// Permission to use, copy, modify, and/or distribute this software for any purpose with or without fee is hereby granted.
 
 
 #include "FloorSpawn.h"
@@ -79,13 +79,14 @@ void AFloorSpawn::SpawnItems()
 {
 	if (IsValid(YellowObstacleClass) && IsValid(BlueObstacleClass) && IsValid(CoinPickupClass))
 	{
-		SpawnLaneItem(CenterLane);
-		SpawnLaneItem(LeftLane);
-		SpawnLaneItem(RightLane);
+		int32 BigObstacle = 0;
+		SpawnLaneItem(CenterLane, BigObstacle);
+		SpawnLaneItem(LeftLane, BigObstacle);
+		SpawnLaneItem(RightLane, BigObstacle);
 	}
 }
 
-void AFloorSpawn::SpawnLaneItem(UArrowComponent* Lane)
+void AFloorSpawn::SpawnLaneItem(UArrowComponent* Lane, int32& BigObstacle)
 {
 	const float RandValue = FMath::RandRange(0.0f, 1.0f);
 	FActorSpawnParameters SpawnParameters;
@@ -93,16 +94,34 @@ void AFloorSpawn::SpawnLaneItem(UArrowComponent* Lane)
 
 	const FTransform& Location = Lane->GetComponentTransform();
 
+	// Spawn obstacle if value is between 0,1 and 0,4
 	if (UKismetMathLibrary::InRange_FloatFloat(RandValue, SpawnPercent1, SpawnPercent2, true, true))
 	{
-		ABaseObstacle* Obstacle = GetWorld()->SpawnActor<ABaseObstacle>(YellowObstacleClass, Location, SpawnParameters);
-		ChildActors.Add(Obstacle);
+		ABaseObstacle* YellowObstacle = GetWorld()->SpawnActor<ABaseObstacle>(YellowObstacleClass, Location, SpawnParameters);
+		ChildActors.Add(YellowObstacle);
 	}
+	// Spawn obstacle if value is between 0,4 and 0,7
 	else if (UKismetMathLibrary::InRange_FloatFloat(RandValue, SpawnPercent2, SpawnPercent3, true, true))
 	{
-		ABaseObstacle* Obstacle = GetWorld()->SpawnActor<ABaseObstacle>(BlueObstacleClass, Location, SpawnParameters);
-		ChildActors.Add(Obstacle);
+		// Adding number to BigObstacle as it gets spawned on each lane.
+		// If there are already two BlueObstacle then spawn YellowObstacle or no obstacle
+		if (BigObstacle < 2)
+		{
+			ABaseObstacle* BlueObstacle = GetWorld()->SpawnActor<ABaseObstacle>(BlueObstacleClass, Location, SpawnParameters);
+			ChildActors.Add(BlueObstacle);
+
+			if (BlueObstacle)
+			{
+				BigObstacle += 1;
+			}
+			else
+			{
+				ABaseObstacle* YellowObstacle = GetWorld()->SpawnActor<ABaseObstacle>(YellowObstacleClass, Location, SpawnParameters);
+				ChildActors.Add(YellowObstacle);
+			}
+		}
 	}
+	// Spawn coin if value is between 0,7 and 1
 	else if (UKismetMathLibrary::InRange_FloatFloat(RandValue, SpawnPercent3, 1.0f, true, true))
 	{
 		ACoinPickup* Coin = GetWorld()->SpawnActor<ACoinPickup>(CoinPickupClass, Location, SpawnParameters);

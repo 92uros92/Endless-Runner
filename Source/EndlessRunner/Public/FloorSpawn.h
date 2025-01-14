@@ -1,4 +1,4 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+// Permission to use, copy, modify, and/or distribute this software for any purpose with or without fee is hereby granted.
 
 #pragma once
 
@@ -66,13 +66,16 @@ public:
 	TArray<AFloorSpawn*> FloorSurfaces;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components")
-	float SpawnPercent1 = 0.2f;
+	float SpawnPercent1 = 0.1f;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components")
-	float SpawnPercent2 = 0.5f;
+	float SpawnPercent2 = 0.4f;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components")
-	float SpawnPercent3 = 0.8f;
+	float SpawnPercent3 = 0.7f;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components")
+	float SpawnPercent4 = 0.8f;
 
 
 	AFloorSpawn();
@@ -107,6 +110,6 @@ protected:
 		const FHitResult& SweepResult);
 
 	UFUNCTION()
-	void SpawnLaneItem(UArrowComponent* Lane);
+	void SpawnLaneItem(UArrowComponent* Lane, int32& BigObstacle);
 
 };
