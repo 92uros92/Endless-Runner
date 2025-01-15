@@ -10,6 +10,7 @@
 #include "GameFramework/Controller.h"
 #include "Sound/SoundBase.h"
 #include "GameFramework/PlayerStart.h"
+#include "GameFramework/CharacterMovementComponent.h"
 
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
@@ -31,6 +32,10 @@ AER_Character::AER_Character()
 	CameraComp->bUsePawnControlRotation = false;
 	CameraComp->SetupAttachment(SpringArm, USpringArmComponent::SocketName);
 	
+	InitialSpeed = 450;
+	MaxSpeed = 2000;
+	GetCharacterMovement()->MaxWalkSpeed = InitialSpeed;
+
 	CurrentLane = 1;
 	NextLane = 0;
 
@@ -142,6 +147,12 @@ void AER_Character::Death()
 void AER_Character::AddCoin()
 {
 	RunGameMode->AddCoin();
+}
+
+void AER_Character::FinishedMaxSpeed()
+{
+	InitialSpeed = MaxSpeed;
+	GetCharacterMovement()->MaxWalkSpeed = MaxSpeed;
 }
 
 void AER_Character::Tick(float DeltaTime)

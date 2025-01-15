@@ -27,6 +27,12 @@ public:
 	UPROPERTY(VisibleInstanceOnly, BlueprintReadWrite, Category = "Lane")
 	int32 NextLane;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Sound")
+	int32 InitialSpeed;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Sound")
+	int32 MaxSpeed;
+
 
 	AER_Character();
 
@@ -48,6 +54,12 @@ public:
 
 	UFUNCTION()
 	void AddCoin();
+
+	UFUNCTION(BlueprintImplementableEvent, Category = "Speed")
+	void IncreseSpeed();
+
+	UFUNCTION(BlueprintCallable, Category = "Speed")
+	void FinishedMaxSpeed();
 
 protected:
 
