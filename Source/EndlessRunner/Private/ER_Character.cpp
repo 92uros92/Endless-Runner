@@ -32,9 +32,9 @@ AER_Character::AER_Character()
 	CameraComp->bUsePawnControlRotation = false;
 	CameraComp->SetupAttachment(SpringArm, USpringArmComponent::SocketName);
 	
-	InitialSpeed = 450;
-	MaxSpeed = 2000;
 	GetCharacterMovement()->MaxWalkSpeed = InitialSpeed;
+	InitialSpeed = 450.0f;
+	MaxSpeed = 2000.0f;
 
 	CurrentLane = 1;
 	NextLane = 0;
@@ -67,7 +67,7 @@ void AER_Character::BeginPlay()
 
 	PlayerStart = Cast<APlayerStart>(UGameplayStatics::GetActorOfClass(GetWorld(), APlayerStart::StaticClass()));
 
-
+	IncreseSpeed();
 }
 
 void AER_Character::UpdateChangeLane(const float Value)
@@ -114,6 +114,11 @@ void AER_Character::OnDeath()
 		GetWorldTimerManager().ClearTimer(RestartTimer);
 	}
 
+	if (ChangeSpeedTimer.IsValid())
+	{
+		GetWorldTimerManager().ClearTimer(ChangeSpeedTimer);
+	}
+
 	RunGameMode->PlayerDied();
 }
 
@@ -149,11 +154,43 @@ void AER_Character::AddCoin()
 	RunGameMode->AddCoin();
 }
 
-void AER_Character::FinishedMaxSpeed()
+void AER_Character::IncreseSpeed()
 {
-	InitialSpeed = MaxSpeed;
-	GetCharacterMovement()->MaxWalkSpeed = MaxSpeed;
+	UWorld* World = GetWorld();
+
+	if (World)
+	{
+		World->GetTimerManager().SetTimer(ChangeSpeedTimer, this, &AER_Character::UpdateSpeed, 3.0f, true);
+
+		//GetCharacterMovement()->MaxWalkSpeed = InitialSpeed;
+
+		UE_LOG(LogTemp, Warning, TEXT("(IncreseSpeed()) Initial Speed: %f"), InitialSpeed);
+	}
 }
+
+void AER_Character::UpdateSpeed()
+{
+	float NewInitialSpeed = InitialSpeed + 300.0f;
+	
+	//float NewSpeed = FMath::Lerp(InitialSpeed, NewInitialSpeed, MaxSpeed);
+
+	InitialSpeed = NewInitialSpeed;
+
+	GetCharacterMovement()->MaxWalkSpeed = NewInitialSpeed;
+
+	UE_LOG(LogTemp, Warning, TEXT("(UpdateSpeed()) NewInitial Speed: %f"), NewInitialSpeed);
+
+	/*	TODO:
+	*	- Delite timer
+	*	- Edit code
+	*/
+}
+
+/*void AER_Character::FinishedSpeed()
+{
+	//float NewMaxSpeed = GetCharacterMovement()->MaxWalkSpeed;
+	InitialSpeed = MaxSpeed;
+}*/
 
 void AER_Character::Tick(float DeltaTime)
 {

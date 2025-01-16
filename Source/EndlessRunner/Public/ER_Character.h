@@ -27,11 +27,11 @@ public:
 	UPROPERTY(VisibleInstanceOnly, BlueprintReadWrite, Category = "Lane")
 	int32 NextLane;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Sound")
-	int32 InitialSpeed;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Speed")
+	float InitialSpeed;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Sound")
-	int32 MaxSpeed;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Speed")
+	float MaxSpeed;
 
 
 	AER_Character();
@@ -55,11 +55,14 @@ public:
 	UFUNCTION()
 	void AddCoin();
 
-	UFUNCTION(BlueprintImplementableEvent, Category = "Speed")
+	UFUNCTION(BlueprintCallable, Category = "Speed")
 	void IncreseSpeed();
 
 	UFUNCTION(BlueprintCallable, Category = "Speed")
-	void FinishedMaxSpeed();
+	void UpdateSpeed();
+
+	/*UFUNCTION(BlueprintCallable, Category = "Speed")
+	void FinishedSpeed();*/
 
 protected:
 
@@ -83,6 +86,9 @@ protected:
 
 	UPROPERTY()
 	FTimerHandle RestartTimer;
+
+	UPROPERTY()
+	FTimerHandle ChangeSpeedTimer;
 
 	UPROPERTY()
 	class APlayerStart* PlayerStart;
