@@ -61,9 +61,6 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Speed")
 	void UpdateSpeed();
 
-	/*UFUNCTION(BlueprintCallable, Category = "Speed")
-	void FinishedSpeed();*/
-
 protected:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components")

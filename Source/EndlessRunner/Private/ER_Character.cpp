@@ -111,12 +111,12 @@ void AER_Character::OnDeath()
 {
 	if (RestartTimer.IsValid())
 	{
-		GetWorldTimerManager().ClearTimer(RestartTimer);
+		GetWorld()->GetTimerManager().ClearTimer(RestartTimer);
 	}
 
 	if (ChangeSpeedTimer.IsValid())
 	{
-		GetWorldTimerManager().ClearTimer(ChangeSpeedTimer);
+		GetWorld()->GetTimerManager().ClearTimer(ChangeSpeedTimer);
 	}
 
 	RunGameMode->PlayerDied();
@@ -160,37 +160,30 @@ void AER_Character::IncreseSpeed()
 
 	if (World)
 	{
-		World->GetTimerManager().SetTimer(ChangeSpeedTimer, this, &AER_Character::UpdateSpeed, 3.0f, true);
+		World->GetTimerManager().SetTimer(ChangeSpeedTimer, this, &AER_Character::UpdateSpeed, 10.0f, true, 10.0f);
 
-		//GetCharacterMovement()->MaxWalkSpeed = InitialSpeed;
-
-		UE_LOG(LogTemp, Warning, TEXT("(IncreseSpeed()) Initial Speed: %f"), InitialSpeed);
+		//UE_LOG(LogTemp, Warning, TEXT("(IncreseSpeed()) Initial Speed: %f"), InitialSpeed);
 	}
 }
 
 void AER_Character::UpdateSpeed()
 {
-	float NewInitialSpeed = InitialSpeed + 300.0f;
-	
-	//float NewSpeed = FMath::Lerp(InitialSpeed, NewInitialSpeed, MaxSpeed);
+	if (InitialSpeed < 2000.0f)
+	{
+		float NewInitialSpeed = InitialSpeed + 300.0f;
 
-	InitialSpeed = NewInitialSpeed;
+		InitialSpeed = NewInitialSpeed;
 
-	GetCharacterMovement()->MaxWalkSpeed = NewInitialSpeed;
+		GetCharacterMovement()->MaxWalkSpeed = NewInitialSpeed;
 
-	UE_LOG(LogTemp, Warning, TEXT("(UpdateSpeed()) NewInitial Speed: %f"), NewInitialSpeed);
+		UE_LOG(LogTemp, Warning, TEXT("(UpdateSpeed()) NewInitial Speed: %f"), NewInitialSpeed);
+	}
 
 	/*	TODO:
 	*	- Delite timer
 	*	- Edit code
 	*/
 }
-
-/*void AER_Character::FinishedSpeed()
-{
-	//float NewMaxSpeed = GetCharacterMovement()->MaxWalkSpeed;
-	InitialSpeed = MaxSpeed;
-}*/
 
 void AER_Character::Tick(float DeltaTime)
 {

@@ -133,7 +133,7 @@ void AFloorSpawn::DestroyFloorSurface()
 {
 	if (DestroyHandle.IsValid())
 	{
-		GetWorldTimerManager().ClearTimer(DestroyHandle);
+		GetWorld()->GetTimerManager().ClearTimer(DestroyHandle);
 	}
 
 	for (auto Child : ChildActors)
