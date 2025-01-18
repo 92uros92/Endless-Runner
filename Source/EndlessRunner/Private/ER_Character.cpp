@@ -40,6 +40,7 @@ AER_Character::AER_Character()
 	NextLane = 0;
 
 	bIsDeath = false;
+	bResetLevel = false;
 }
 
 void AER_Character::BeginPlay()
@@ -96,7 +97,18 @@ void AER_Character::MoveLeft()
 
 void AER_Character::ResetLevel()
 {
+	if (RestartTimer.IsValid())
+	{
+		GetWorld()->GetTimerManager().ClearTimer(RestartTimer);
+	}
+
+	if (ChangeSpeedTimer.IsValid())
+	{
+		GetWorld()->GetTimerManager().ClearTimer(ChangeSpeedTimer);
+	}
+
 	bIsDeath = false;
+	bResetLevel = true;
 	EnableInput(nullptr);
 	GetMesh()->SetVisibility(true);
 
@@ -119,6 +131,8 @@ void AER_Character::OnDeath()
 		GetWorld()->GetTimerManager().ClearTimer(ChangeSpeedTimer);
 	}
 
+	bResetLevel = true;
+
 	RunGameMode->PlayerDied();
 }
 
@@ -127,6 +141,8 @@ void AER_Character::Death()
 	if (!bIsDeath)
 	{
 		//UE_LOG(LogTemp, Warning, TEXT("Character DIED!!"));
+
+		bResetLevel = true;
 
 		const FVector Location = GetActorLocation();
 
@@ -144,7 +160,10 @@ void AER_Character::Death()
 
 			GetMesh()->SetVisibility(false);
 
-			World->GetTimerManager().SetTimer(RestartTimer, this, &AER_Character::OnDeath, 1.0f);
+			if (!GetWorldTimerManager().IsTimerActive(RestartTimer))
+			{
+				World->GetTimerManager().SetTimer(RestartTimer, this, &AER_Character::OnDeath, 1.0f);
+			}
 		}
 	}
 }
@@ -160,7 +179,20 @@ void AER_Character::IncreseSpeed()
 
 	if (World)
 	{
-		World->GetTimerManager().SetTimer(ChangeSpeedTimer, this, &AER_Character::UpdateSpeed, 10.0f, true, 10.0f);
+		if (!GetWorldTimerManager().IsTimerActive(ChangeSpeedTimer))
+		{
+			if (bResetLevel)
+			{
+				GetCharacterMovement()->MaxWalkSpeed = InitialSpeed;
+				InitialSpeed = 450.0f;
+
+				World->GetTimerManager().SetTimer(ChangeSpeedTimer, this, &AER_Character::UpdateSpeed, 5.0f, true, 5.0f);
+			}
+			else
+			{
+				World->GetTimerManager().SetTimer(ChangeSpeedTimer, this, &AER_Character::UpdateSpeed, 5.0f, true, 5.0f);
+			}
+		}
 
 		//UE_LOG(LogTemp, Warning, TEXT("(IncreseSpeed()) Initial Speed: %f"), InitialSpeed);
 	}

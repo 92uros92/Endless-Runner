@@ -71,7 +71,10 @@ void AFloorSpawn::OnFloorSpawnBoxOverlap(UPrimitiveComponent* OverlappedComponen
 	{
 		RunGameMode->AddFloorSurface(true);
 
-		GetWorldTimerManager().SetTimer(DestroyHandle, this, &AFloorSpawn::DestroyFloorSurface, 2.0f, false);
+		if (!GetWorldTimerManager().IsTimerActive(DestroyHandle))
+		{
+			GetWorldTimerManager().SetTimer(DestroyHandle, this, &AFloorSpawn::DestroyFloorSurface, 2.0f, false);
+		}
 	}
 }
 

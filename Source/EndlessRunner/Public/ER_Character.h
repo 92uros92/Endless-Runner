@@ -93,6 +93,9 @@ protected:
 	UPROPERTY()
 	bool bIsDeath;
 
+	UPROPERTY()
+	bool bResetLevel;
+
 
 	virtual void BeginPlay() override;
 
