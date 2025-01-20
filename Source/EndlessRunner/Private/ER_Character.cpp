@@ -34,7 +34,7 @@ AER_Character::AER_Character()
 	
 	GetCharacterMovement()->MaxWalkSpeed = InitialSpeed;
 	InitialSpeed = 450.0f;
-	MaxSpeed = 2000.0f;
+	MaxSpeed = 1950.0f;
 
 	CurrentLane = 1;
 	NextLane = 0;
@@ -117,6 +117,8 @@ void AER_Character::ResetLevel()
 		SetActorLocation(PlayerStart->GetActorLocation());
 		SetActorRotation(PlayerStart->GetActorRotation());
 	}
+
+	ResetSpeed();
 }
 
 void AER_Character::OnDeath()
@@ -162,6 +164,7 @@ void AER_Character::Death()
 
 			if (!GetWorldTimerManager().IsTimerActive(RestartTimer))
 			{
+				// 
 				World->GetTimerManager().SetTimer(RestartTimer, this, &AER_Character::OnDeath, 1.0f);
 			}
 		}
@@ -181,17 +184,8 @@ void AER_Character::IncreseSpeed()
 	{
 		if (!GetWorldTimerManager().IsTimerActive(ChangeSpeedTimer))
 		{
-			if (bResetLevel)
-			{
-				GetCharacterMovement()->MaxWalkSpeed = InitialSpeed;
-				InitialSpeed = 450.0f;
-
-				World->GetTimerManager().SetTimer(ChangeSpeedTimer, this, &AER_Character::UpdateSpeed, 5.0f, true, 5.0f);
-			}
-			else
-			{
-				World->GetTimerManager().SetTimer(ChangeSpeedTimer, this, &AER_Character::UpdateSpeed, 5.0f, true, 5.0f);
-			}
+			// After 10 seconds from the start call UpdateSpeed and then calls it every 10 seconds
+			World->GetTimerManager().SetTimer(ChangeSpeedTimer, this, &AER_Character::UpdateSpeed, 10.0f, true, 10.0f);
 		}
 
 		//UE_LOG(LogTemp, Warning, TEXT("(IncreseSpeed()) Initial Speed: %f"), InitialSpeed);
@@ -200,7 +194,7 @@ void AER_Character::IncreseSpeed()
 
 void AER_Character::UpdateSpeed()
 {
-	if (InitialSpeed < 2000.0f)
+	if (InitialSpeed < MaxSpeed)
 	{
 		float NewInitialSpeed = InitialSpeed + 300.0f;
 
@@ -210,11 +204,28 @@ void AER_Character::UpdateSpeed()
 
 		UE_LOG(LogTemp, Warning, TEXT("(UpdateSpeed()) NewInitial Speed: %f"), NewInitialSpeed);
 	}
+}
 
-	/*	TODO:
-	*	- Delite timer
-	*	- Edit code
-	*/
+void AER_Character::ResetSpeed()
+{
+	if (bResetLevel)
+	{
+		UWorld* World = GetWorld();
+
+		if (World)
+		{
+			float ResetInitialSpeed = 450.0f;
+			InitialSpeed = ResetInitialSpeed;
+			GetCharacterMovement()->MaxWalkSpeed = ResetInitialSpeed;
+
+			if (!GetWorldTimerManager().IsTimerActive(ChangeSpeedTimer))
+			{
+				World->GetTimerManager().SetTimer(ChangeSpeedTimer, this, &AER_Character::UpdateSpeed, 10.0f, true, 10.0f);
+
+				UE_LOG(LogTemp, Warning, TEXT("(UpdateSpeed()) ResetInitialSpeed Speed: %f"), ResetInitialSpeed);
+			}
+		}
+	}
 }
 
 void AER_Character::Tick(float DeltaTime)

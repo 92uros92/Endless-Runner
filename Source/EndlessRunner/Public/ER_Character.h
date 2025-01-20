@@ -55,11 +55,14 @@ public:
 	UFUNCTION()
 	void AddCoin();
 
-	UFUNCTION(BlueprintCallable, Category = "Speed")
+	UFUNCTION(Category = "Speed")
 	void IncreseSpeed();
 
-	UFUNCTION(BlueprintCallable, Category = "Speed")
+	UFUNCTION(Category = "Speed")
 	void UpdateSpeed();
+
+	UFUNCTION(Category = "Speed")
+	void ResetSpeed();
 
 protected:
 
