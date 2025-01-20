@@ -49,8 +49,10 @@ void AEndlessRunnerGameMode::BeginPlay()
 
 void AEndlessRunnerGameMode::CreateInitialFloorSurfaces()
 {
+	// Don´t spawn Items on first Floor
 	AFloorSpawn* FloorSpawn = AddFloorSurface(false);
 
+	// Get locations for all three lane to spawn Items
 	if (FloorSpawn)
 	{
 		LaneSwitchValues.Add(FloorSpawn->LeftLane->GetComponentLocation().Y);
@@ -63,9 +65,11 @@ void AEndlessRunnerGameMode::CreateInitialFloorSurfaces()
 	//	UE_LOG(LogTemp, Warning, TEXT("Lane Value: %f"), Value);
 	//}
 
+	// Don´t spawn Items on second and third Floor
 	AddFloorSurface(false);
 	AddFloorSurface(false);
 
+	// Spawn Items on next "10" Floors
 	for (int i = 0; i < NumInitialFloorSurfaces; i++)
 	{
 		AddFloorSurface(true);
@@ -151,7 +155,8 @@ void AEndlessRunnerGameMode::PlayerDied()
 	NumOfLives -= 1;
 	OnLivesCountChanged.Broadcast(NumOfLives);
 
-	if (NumOfLives > 0)
+	// If Player still have the lives
+	if ((NumOfLives > 0) && IsValid(FloorSpawnClass))
 	{
 		// Iterate all FloorSurfaces and call DestroyFloorSurface
 		for (auto Surface : FloorSurfaces)
@@ -192,15 +197,6 @@ void AEndlessRunnerGameMode::GameOver()
 
 void AEndlessRunnerGameMode::RemoveSurface(AFloorSpawn* Surface)
 {
-	/*TArray<AActor*> Floors;
-
-	UGameplayStatics::GetAllActorsOfClass(GetWorld(), AFloorSpawn::StaticClass(), Floors);
-
-	for (auto Floor : Floors)
-	{
-
-	}*/
-
 	if (FloorSurfaces.Contains(Surface))
 	{
 		FloorSurfaces.Remove(Surface);

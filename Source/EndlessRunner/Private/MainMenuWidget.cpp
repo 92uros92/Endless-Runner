@@ -41,13 +41,10 @@ void UMainMenuWidget::OnHighScoreClick()
 	if (IsValid(this))
 	{
 		this->RemoveFromParent();
-		//this = nullptr;
 	}
 
 	if (IsValid(HighScoreWidgetClass))
 	{
-		//UGameplayStatics::SetGamePaused(GetWorld(), true);
-
 		UUserWidget* Widget = CreateWidget(GetWorld(), HighScoreWidgetClass);
 
 		if (Widget)

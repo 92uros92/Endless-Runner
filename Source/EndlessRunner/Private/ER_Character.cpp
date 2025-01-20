@@ -73,6 +73,7 @@ void AER_Character::BeginPlay()
 
 void AER_Character::UpdateChangeLane(const float Value)
 {
+	// Change location on the lane
 	FVector Location = GetCapsuleComponent()->GetComponentLocation();
 	Location.Y = FMath::Lerp(RunGameMode->LaneSwitchValues[CurrentLane], RunGameMode->LaneSwitchValues[NextLane], Value);
 	SetActorLocation(Location);
@@ -164,7 +165,7 @@ void AER_Character::Death()
 
 			if (!GetWorldTimerManager().IsTimerActive(RestartTimer))
 			{
-				// 
+				// Call OnDeath function every second
 				World->GetTimerManager().SetTimer(RestartTimer, this, &AER_Character::OnDeath, 1.0f);
 			}
 		}
@@ -184,7 +185,7 @@ void AER_Character::IncreseSpeed()
 	{
 		if (!GetWorldTimerManager().IsTimerActive(ChangeSpeedTimer))
 		{
-			// After 10 seconds from the start call UpdateSpeed and then calls it every 10 seconds
+			// After 10 seconds from the start call UpdateSpeed function and then calls it every 10 seconds
 			World->GetTimerManager().SetTimer(ChangeSpeedTimer, this, &AER_Character::UpdateSpeed, 10.0f, true, 10.0f);
 		}
 

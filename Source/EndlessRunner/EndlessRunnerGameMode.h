@@ -29,7 +29,7 @@ public:
 	UPROPERTY(EditAnywhere, Category = "Components")
 	TSubclassOf<class UUserWidget> GameOverScreenClass;
 
-	UPROPERTY(VisibleInstanceOnly, Category = "Runtime")
+	UPROPERTY(VisibleInstanceOnly, Category = "Widget")
 	class UGamePlayWidget* GamePlayWidget;
 
 	UPROPERTY(VisibleAnywhere, Category = "Score")
@@ -47,16 +47,16 @@ public:
 	UPROPERTY(EditAnywhere)
 	int32 MaxLives;
 
-	UPROPERTY(EditAnywhere, Category = "Components")
+	UPROPERTY(EditAnywhere, Category = "Floor")
 	int32 NumInitialFloorSurfaces;
 
-	UPROPERTY(VisibleInstanceOnly, Category = "Runtime")
+	UPROPERTY(VisibleInstanceOnly, Category = "Floor")
 	FTransform NextFloorSpawnPoint;
 
-	UPROPERTY(VisibleInstanceOnly, Category = "Runtime")
+	UPROPERTY(VisibleInstanceOnly, Category = "Floor")
 	TArray<float> LaneSwitchValues;
 
-	UPROPERTY(VisibleInstanceOnly, Category = "Runtime")
+	UPROPERTY(VisibleInstanceOnly, Category = "Floor")
 	TArray<AFloorSpawn*> FloorSurfaces;
 
 	UPROPERTY(BlueprintAssignable, BlueprintCallable, Category = "Events")

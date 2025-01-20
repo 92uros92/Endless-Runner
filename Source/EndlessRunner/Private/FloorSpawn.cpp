@@ -73,6 +73,7 @@ void AFloorSpawn::OnFloorSpawnBoxOverlap(UPrimitiveComponent* OverlappedComponen
 
 		if (!GetWorldTimerManager().IsTimerActive(DestroyHandle))
 		{
+			// Every 2 seconds delete longest existing FloorSurface
 			GetWorldTimerManager().SetTimer(DestroyHandle, this, &AFloorSpawn::DestroyFloorSurface, 2.0f, false);
 		}
 	}
@@ -97,13 +98,13 @@ void AFloorSpawn::SpawnLaneItem(UArrowComponent* Lane, int32& BigObstacle)
 
 	const FTransform& Location = Lane->GetComponentTransform();
 
-	// Spawn obstacle if value is between 0,1 and 0,4
+	// Spawn YellowObstacle if value is between 0,1 and 0,4
 	if (UKismetMathLibrary::InRange_FloatFloat(RandValue, SpawnPercent1, SpawnPercent2, true, true))
 	{
 		ABaseObstacle* YellowObstacle = GetWorld()->SpawnActor<ABaseObstacle>(YellowObstacleClass, Location, SpawnParameters);
 		ChildActors.Add(YellowObstacle);
 	}
-	// Spawn obstacle if value is between 0,4 and 0,7
+	// Spawn BlueObstacle if value is between 0,4 and 0,7
 	else if (UKismetMathLibrary::InRange_FloatFloat(RandValue, SpawnPercent2, SpawnPercent3, true, true))
 	{
 		// Adding number to BigObstacle as it gets spawned on each lane.
@@ -139,26 +140,33 @@ void AFloorSpawn::DestroyFloorSurface()
 		GetWorld()->GetTimerManager().ClearTimer(DestroyHandle);
 	}
 
-	for (auto Child : ChildActors)
+	// Delete all Obstacles and Coins on FloorSurface
+	if (ChildActors.Num() != 0)
 	{
-		if (IsValid(Child))
+		for (auto Child : ChildActors)
 		{
-			Child->Destroy();
+			if (IsValid(Child))
+			{
+				Child->Destroy();
+			}
 		}
+
+		ChildActors.Empty();
 	}
 
-	ChildActors.Empty();
-
-	for (AFloorSpawn* Floor : FloorSurfaces)
+	// Delete FloorSurfaces
+	if (FloorSurfaces.Num() != 0)
 	{
-		if (IsValid(Floor))
+		for (AFloorSpawn* Floor : FloorSurfaces)
 		{
-			Floor->Destroy();
+			if (IsValid(Floor))
+			{
+				Floor->Destroy();
+			}
 		}
-	}
 
-	FloorSurfaces.Empty();
-	
+		FloorSurfaces.Empty();
+	}
 	//RunGameMode->RemoveSurface(this);
 
 	this->Destroy();

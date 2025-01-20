@@ -59,12 +59,6 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components")
 	class UBoxComponent* FloorSpawnBox;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
-	TArray<AActor*> ChildActors;
-
-	UPROPERTY(VisibleInstanceOnly, Category = "Runtime")
-	TArray<AFloorSpawn*> FloorSurfaces;
-
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components")
 	float SpawnPercent1 = 0.1f;
 
@@ -76,6 +70,12 @@ public:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components")
 	float SpawnPercent4 = 0.8f;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	TArray<AActor*> ChildActors;
+
+	UPROPERTY(VisibleAnywhere)
+	TArray<AFloorSpawn*> FloorSurfaces;
 
 
 	AFloorSpawn();
